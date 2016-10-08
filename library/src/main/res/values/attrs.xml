@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="TextView">
+        <attr name="colors" format="reference"/>
+        <attr name="simultaneousColors" format="integer"/>
+        <attr name="angle" format="integer"/>
+        <attr name="speed" format="integer"/>
+        <attr name="font" format="string"/>
+    </declare-styleable>
+
+    <array name="default_gradient_colors">
+        <item>@color/materialRed</item>
+        <item>@color/materialPink</item>
+        <item>@color/materialPurple</item>
+        <item>@color/materialDeepPurple</item>
+        <item>@color/materialIndigo</item>
+        <item>@color/materialBlue</item>
+    </array>
+</resources>
