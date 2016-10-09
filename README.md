@@ -1,7 +1,7 @@
 ![alt tag](https://cloud.githubusercontent.com/assets/12541829/19215982/51424130-8dad-11e6-8a5f-e92652e4ce2b.gif)
 
-AnimatedGradientTextView : A TextView which uses color gradients
-================================================================
+AnimatedGradientTextView : Color gradients for TextView
+=======================================================
 
 This library will allow you to create TextView which uses color gradients and custom fonts.
 
