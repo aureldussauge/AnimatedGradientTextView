@@ -64,8 +64,11 @@ public class GradientManager {
      */
     private int speed;
 
+    private static final int ATTR_NOT_FOUND = Integer.MIN_VALUE;
+
     /**
      * Initialize the variables of this object
+     *
      * @param attrs The attributes of the TextView
      */
     @SuppressWarnings("ResourceType")
@@ -81,14 +84,30 @@ public class GradientManager {
         final TypedArray typedArray = textView.getContext().obtainStyledAttributes(attrs, set);
 
         // Get colors array id
-        int colorsArrayId = typedArray.getResourceId(0, 0);
+        int colorsArrayId = typedArray.getResourceId(0, ATTR_NOT_FOUND);
+
         // Get colors
-        colors = textView.getResources().getIntArray(colorsArrayId);
+        if (colorsArrayId != ATTR_NOT_FOUND) {
+            colors = textView.getResources().getIntArray(colorsArrayId);
+        }
+        else {
+            colors = textView.getResources().getIntArray(R.array.default_gradient_colors);
+        }
 
         // Get others attributes
-        simultaneousColors = typedArray.getInt(1, 0);
-        angle = typedArray.getInt(2, 0);
-        speed = typedArray.getInt(3, 0);
+        simultaneousColors = typedArray.getInt(1, ATTR_NOT_FOUND);
+        angle = typedArray.getInt(2, ATTR_NOT_FOUND);
+        speed = typedArray.getInt(3, ATTR_NOT_FOUND);
+
+        if(simultaneousColors == ATTR_NOT_FOUND){
+            simultaneousColors = 2;
+        }
+        if(angle == ATTR_NOT_FOUND){
+            angle = 45;
+        }
+        if(speed == ATTR_NOT_FOUND){
+            speed = 1000;
+        }
 
         typedArray.recycle();
     }
@@ -157,7 +176,8 @@ public class GradientManager {
 
     /**
      * Get the points used to create the Linear Gradient from the angle
-     * @param width the textview width
+     *
+     * @param width  the textview width
      * @param height the textview height
      * @return An array containing the two points
      */
@@ -166,7 +186,7 @@ public class GradientManager {
         double angleRadian = Math.toRadians(angle);
 
         // We want a circle radius > Max dist ( circle center, rectangle point )
-        int circleRadius = Math.max(width, height);
+        int circleRadius = width;
 
         // Get the circle center
         Point circleCenter = new Point(width / 2, height / 2);

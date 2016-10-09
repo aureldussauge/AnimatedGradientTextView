@@ -25,9 +25,12 @@ public final class CustomFontManager {
 
         final TypedArray typedArray = textView.getContext().obtainStyledAttributes(attrs, set);
         String fontName = typedArray.getString(0);
+
         typedArray.recycle();
 
-        Typeface font = Typeface.createFromAsset(textView.getContext().getAssets(), FONT_FILE_NAME+fontName);
-        textView.setTypeface(font);
+        if(fontName != null) {
+            Typeface font = Typeface.createFromAsset(textView.getContext().getAssets(), FONT_FILE_NAME + fontName);
+            textView.setTypeface(font);
+        }
     }
 }
