@@ -8,7 +8,7 @@ This library will allow you to create TextView which uses color gradients and cu
 Latest release
 ---------------
 
-The most recent release is v0.0.2, released October 9, 2016
+The most recent release is v0.0.3, released October 23, 2016
 
 To add a dependency using Gradle, add in your **top-level build.gradle**:
 ```
@@ -23,7 +23,7 @@ allprojects {
 And then add in your **app build.gradle** :
 ```
 dependencies {
-	compile 'com.github.mursaat:animatedgradienttextview:v0.0.2'
+	compile 'com.github.mursaat:animatedgradienttextview:v0.0.3'
 }
 ```
 
