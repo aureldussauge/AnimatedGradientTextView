@@ -34,4 +34,11 @@ public class AnimatedGradientTextView extends TextView {
         gradientManager.applyNewGradiantThread();
     }
 
+    @Override
+    protected void onWindowVisibilityChanged(int visibility) {
+        super.onWindowVisibilityChanged(visibility);
+        if(visibility == VISIBLE && getScaleX() != 0 && getScaleY() != 0){
+            gradientManager.applyNewGradiantThread();
+        }
+    }
 }

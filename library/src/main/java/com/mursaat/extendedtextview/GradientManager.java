@@ -133,7 +133,10 @@ public class GradientManager {
             new Thread() {
                 @Override
                 public void run() {
-                    countRunningThread.incrementAndGet();
+                    // If we already have a running thread, we can leave
+                    if(!countRunningThread.compareAndSet(0, 1)){
+                        return;
+                    }
 
                     long lastTime = System.currentTimeMillis();
                     int totalDelta = 0;
@@ -143,7 +146,7 @@ public class GradientManager {
 
                     int[] currentColors = Arrays.copyOf(colors, simultaneousColors);
                     int currentGradient = 0;
-                    while (textView.isShown() && countRunningThread.intValue() <= 1) {
+                    while (textView.isShown()) {
                         long delta = System.currentTimeMillis() - lastTime;
                         if (delta > DELTA_TIME_EXPECTED_MILLIS) {
 
@@ -167,7 +170,6 @@ public class GradientManager {
                             lastTime = System.currentTimeMillis();
                         }
                     }
-
                     countRunningThread.decrementAndGet();
                 }
             }.start();
