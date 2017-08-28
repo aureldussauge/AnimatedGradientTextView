@@ -5,10 +5,6 @@ import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.widget.TextView;
 
-/**
- * Created by Aurelien on 08/10/2016.
- */
-
 public final class CustomFontManager {
 
     private static final String FONT_FILE_NAME = "fonts/";
@@ -20,7 +16,7 @@ public final class CustomFontManager {
     public static void applyFontFromAttrs(TextView textView, AttributeSet attrs) {
         // Initialize an array containing id of attributes we want to have
         final int[] set = {
-                R.attr.font
+            R.attr.customFont
         };
 
         final TypedArray typedArray = textView.getContext().obtainStyledAttributes(attrs, set);

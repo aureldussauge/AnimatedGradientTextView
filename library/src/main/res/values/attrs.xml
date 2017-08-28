@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <declare-styleable name="TextView">
+    <declare-styleable name="AnimatedGradientTextView">
         <attr name="colors" format="reference"/>
         <attr name="simultaneousColors" format="integer"/>
         <attr name="angle" format="integer"/>
         <attr name="speed" format="integer"/>
-        <attr name="font" format="string"/>
+        <attr name="customFont" format="string"/>
     </declare-styleable>
 
     <array name="default_gradient_colors">

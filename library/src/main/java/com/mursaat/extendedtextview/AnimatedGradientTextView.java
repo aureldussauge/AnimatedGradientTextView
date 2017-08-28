@@ -2,6 +2,7 @@ package com.mursaat.extendedtextview;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.view.View;
 import android.widget.TextView;
 
 /**
@@ -31,14 +32,42 @@ public class AnimatedGradientTextView extends TextView {
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
-        gradientManager.applyNewGradiantThread();
+        gradientManager.stopGradient();
+        gradientManager.startGradient();
+    }
+
+    @Override
+    protected void onVisibilityChanged(View changedView, int visibility) {
+        super.onVisibilityChanged(changedView, visibility);
+        if (visibility == VISIBLE) {
+            if (getScaleX() != 0 && getScaleY() != 0) {
+                gradientManager.startGradient();
+            }
+        } else {
+            gradientManager.stopGradient();
+        }
     }
 
     @Override
     protected void onWindowVisibilityChanged(int visibility) {
         super.onWindowVisibilityChanged(visibility);
-        if(visibility == VISIBLE && getScaleX() != 0 && getScaleY() != 0){
-            gradientManager.applyNewGradiantThread();
+        if (visibility == VISIBLE) {
+            if (getScaleX() != 0 && getScaleY() != 0) {
+                gradientManager.startGradient();
+            }
+        } else {
+            gradientManager.stopGradient();
         }
     }
+
+    @Override
+    public void onScreenStateChanged(int screenState) {
+        super.onScreenStateChanged(screenState);
+        if (screenState == SCREEN_STATE_OFF) {
+            gradientManager.stopGradient();
+        } else if (screenState == SCREEN_STATE_ON) {
+            gradientManager.startGradient();
+        }
+    }
+
 }
