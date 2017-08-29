@@ -1,18 +1,14 @@
 package com.mursaat.extendedtextview;
 
-import android.animation.ArgbEvaluator;
 import android.content.res.TypedArray;
 import android.graphics.Color;
-import android.graphics.LinearGradient;
-import android.graphics.Point;
-import android.graphics.Shader;
-import android.os.SystemClock;
 import android.util.AttributeSet;
 import android.widget.TextView;
 
-import java.util.Arrays;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Used by TextView
@@ -47,9 +43,19 @@ public class GradientManager {
     private int maxFPS;
 
     /**
-     * Current gradient runnable
+     * Time interval between each draw (millis)
      */
-    private GradiantRunnable currGradientRunnable = null;
+    private int drawTimeInterval;
+
+    /**
+     * Current running gradient runnable
+     */
+    private GradientRunnable runnable;
+
+    /**
+     * Current scheduled gradient future running
+     */
+    private ScheduledFuture<?> scheduledFuture = null;
 
     /**
      * The draw-gradient uptime
@@ -101,6 +107,7 @@ public class GradientManager {
         angle = typedArray.getInt(2, ATTR_NOT_FOUND);
         speed = typedArray.getInt(3, ATTR_NOT_FOUND);
         maxFPS = typedArray.getInt(4, ATTR_NOT_FOUND);
+        drawTimeInterval = 1000 / maxFPS;
 
         if (simultaneousColors == ATTR_NOT_FOUND) {
             simultaneousColors = 2;
@@ -128,15 +135,18 @@ public class GradientManager {
         angle = 45;
         speed = 2000;
         maxFPS = 24;
+        drawTimeInterval = 1000 / maxFPS;
     }
 
     public void stopGradient() {
         synchronized (this) {
-            if (currGradientRunnable != null) {
+            if (scheduledFuture != null) {
                 // Save gradient state (future possible restart)
-                currentGradientProgress = currGradientRunnable.getCurrentProgress();
-                currGradientRunnable.stop();
-                currGradientRunnable = null;
+                currentGradientProgress = runnable.getCurrentProgress();
+
+                scheduledFuture.cancel(true);
+                runnable = null;
+                scheduledFuture = null;
             }
         }
     }
@@ -146,7 +156,7 @@ public class GradientManager {
      */
     public void startGradient() {
         synchronized (this) {
-            if (currGradientRunnable != null) {
+            if (scheduledFuture != null) {
                 return;
             }
 
@@ -154,13 +164,15 @@ public class GradientManager {
             final int hf = textView.getHeight();
 
             if (wf > 0 && hf > 0) {
-                currGradientRunnable = new GradiantRunnable(textView, colors, simultaneousColors, angle, speed, maxFPS);
+                runnable = new GradientRunnable(textView, colors, simultaneousColors, angle, speed, maxFPS);
+
                 // Apply saved progress if there is
-                currGradientRunnable.setCurrentProgress(currentGradientProgress);
-                new Thread(currGradientRunnable).start();
+                runnable.setCurrentProgress(currentGradientProgress);
+
+                ScheduledExecutorService scheduledExecutor = Executors.newSingleThreadScheduledExecutor();
+                scheduledFuture = scheduledExecutor.scheduleAtFixedRate(runnable, 0, drawTimeInterval, TimeUnit.MILLISECONDS);
             }
         }
     }
-
 
 }
