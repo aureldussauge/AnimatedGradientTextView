@@ -42,6 +42,11 @@ public class GradientManager {
     private int speed;
 
     /**
+     * How many gradients are calculated by second
+     */
+    private int maxFPS;
+
+    /**
      * Current gradient runnable
      */
     private GradiantRunnable currGradientRunnable = null;
@@ -75,7 +80,8 @@ public class GradientManager {
                 R.attr.colors,
                 R.attr.simultaneousColors,
                 R.attr.angle,
-                R.attr.speed
+                R.attr.speed,
+                R.attr.maxFPS
         };
 
         final TypedArray typedArray = textView.getContext().obtainStyledAttributes(attrs, set);
@@ -94,6 +100,7 @@ public class GradientManager {
         simultaneousColors = typedArray.getInt(1, ATTR_NOT_FOUND);
         angle = typedArray.getInt(2, ATTR_NOT_FOUND);
         speed = typedArray.getInt(3, ATTR_NOT_FOUND);
+        maxFPS = typedArray.getInt(4, ATTR_NOT_FOUND);
 
         if (simultaneousColors == ATTR_NOT_FOUND) {
             simultaneousColors = 2;
@@ -103,6 +110,10 @@ public class GradientManager {
         }
         if (speed == ATTR_NOT_FOUND) {
             speed = 1000;
+        }
+
+        if (maxFPS == ATTR_NOT_FOUND) {
+            maxFPS = 24;
         }
 
         typedArray.recycle();
@@ -116,6 +127,7 @@ public class GradientManager {
         simultaneousColors = 2;
         angle = 45;
         speed = 2000;
+        maxFPS = 24;
     }
 
     public void stopGradient() {
@@ -142,7 +154,7 @@ public class GradientManager {
             final int hf = textView.getHeight();
 
             if (wf > 0 && hf > 0) {
-                currGradientRunnable = new GradiantRunnable(textView, colors, simultaneousColors, angle, speed);
+                currGradientRunnable = new GradiantRunnable(textView, colors, simultaneousColors, angle, speed, maxFPS);
                 // Apply saved progress if there is
                 currGradientRunnable.setCurrentProgress(currentGradientProgress);
                 new Thread(currGradientRunnable).start();

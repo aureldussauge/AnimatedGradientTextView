@@ -11,15 +11,6 @@ import android.widget.TextView;
 import java.util.Arrays;
 
 public class GradiantRunnable implements Runnable {
-    /**
-     * How many gradients are calculated by second
-     */
-    private static final int MAX_FPS = 24;
-
-    /**
-     * The minimum time between each frames in millisecond
-     */
-    private static final long DELTA_TIME_EXPECTED_MILLIS = 1000 / MAX_FPS;
 
     private boolean mustStop = false;
 
@@ -50,12 +41,19 @@ public class GradiantRunnable implements Runnable {
      */
     private long totalDelta = 0;
 
-    public GradiantRunnable(TextView textView, int[] colors, int simultaneousColors, int angle, int speed) {
+
+    /**
+     * The minimum time between each frames in millisecond
+     */
+    private final long deltaTimeExpectedMillis;
+
+    public GradiantRunnable(TextView textView, int[] colors, int simultaneousColors, int angle, int speed, int maxFPS) {
         this.textView = textView;
         this.colors = colors;
         this.simultaneousColors = simultaneousColors;
         this.angle = angle;
         this.speed = speed;
+        this.deltaTimeExpectedMillis = 1000 / maxFPS;
     }
 
     public void stop() {
@@ -76,7 +74,7 @@ public class GradiantRunnable implements Runnable {
         int[] currentColors = Arrays.copyOf(colors, simultaneousColors);
         int currentGradient = 0;
 
-        long lastTime = SystemClock.uptimeMillis();
+        long lastTime = 0;
 
         while (true) {
             if (mustStop) {
@@ -85,7 +83,7 @@ public class GradiantRunnable implements Runnable {
 
             long currentTime = SystemClock.uptimeMillis();
             long delta = currentTime - lastTime;
-            if (delta > DELTA_TIME_EXPECTED_MILLIS) {
+            if (delta > deltaTimeExpectedMillis) {
                 totalDelta += delta;
                 float totalPercentage = totalDelta / ((float) speed);
                 totalPercentage = totalPercentage > 1 ? 1 : totalPercentage;

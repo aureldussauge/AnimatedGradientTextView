@@ -5,6 +5,7 @@
         <attr name="simultaneousColors" format="integer"/>
         <attr name="angle" format="integer"/>
         <attr name="speed" format="integer"/>
+        <attr name="maxFPS" format="integer"/>
         <attr name="customFont" format="string"/>
     </declare-styleable>
 

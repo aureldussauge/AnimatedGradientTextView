@@ -22,6 +22,7 @@
         android:textSize="95sp"
         app:font="@string/title"
         app:angle="45"
+        app:maxFPS="30"
         app:customFont="BebasNeue.otf"
         app:colors="@array/funny_colors"
         app:simultaneousColors="4"
