@@ -5,10 +5,17 @@ AnimatedGradientTextView : Color gradients for TextView
 
 This library will allow you to create TextView which uses color gradients and custom fonts.
 
+Changelog
+---------
+
+v0.0.5
+* app:font become app:customFont
+* Add app:maxFPS (define how many times the gradient should refresh each second)
+
 Latest release
 ---------------
 
-The most recent release is v0.0.3, released October 23, 2016
+The most recent release is v0.0.5, released August 29, 2017
 
 To add a dependency using Gradle, add in your **top-level build.gradle**:
 ```
@@ -23,7 +30,7 @@ allprojects {
 And then add in your **app build.gradle** :
 ```
 dependencies {
-	compile 'com.github.mursaat:animatedgradienttextview:v0.0.3'
+	compile 'com.github.Mursaat:AnimatedGradientTextView:v0.0.5'
 }
 ```
 
@@ -43,7 +50,8 @@ Here is an exemple using an **AnimatedGradientTextView**. I just put in my **xml
 	app:simultaneousColors="4"
 	app:angle="45"
 	app:speed="1000"
-	app:font="BebasNeue.otf" 
+	app:maxFPS="30"
+	app:customFont="BebasNeue.otf" 
 	/>
 ```
 
@@ -66,4 +74,5 @@ All these parameters are optionals. Some explanations :
 * **simultaneousColors** : The number of colors (of the array) possibly displayed in a same time
 * **angle** : The angle of the color gradient
 * **speed** : A number in milliseconds. Increase this number will decrease the gradient move speed
-* **font** : Must be a name of a font located in **assets/fonts** folder
+* **customFont** : Must be a name of a font located in **assets/fonts** folder
+* **maxFPS** : Define how many times the gradient should refresh each second. (Default : 24 FPS)
