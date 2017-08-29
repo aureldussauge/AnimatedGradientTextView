@@ -107,7 +107,6 @@ public class GradientManager {
         angle = typedArray.getInt(2, ATTR_NOT_FOUND);
         speed = typedArray.getInt(3, ATTR_NOT_FOUND);
         maxFPS = typedArray.getInt(4, ATTR_NOT_FOUND);
-        drawTimeInterval = 1000 / maxFPS;
 
         if (simultaneousColors == ATTR_NOT_FOUND) {
             simultaneousColors = 2;
@@ -122,6 +121,8 @@ public class GradientManager {
         if (maxFPS == ATTR_NOT_FOUND) {
             maxFPS = 24;
         }
+
+        drawTimeInterval = 1000 / maxFPS;
 
         typedArray.recycle();
     }
@@ -164,7 +165,7 @@ public class GradientManager {
             final int hf = textView.getHeight();
 
             if (wf > 0 && hf > 0) {
-                runnable = new GradientRunnable(textView, colors, simultaneousColors, angle, speed, maxFPS);
+                runnable = new GradientRunnable(textView, colors, simultaneousColors, angle, speed);
 
                 // Apply saved progress if there is
                 runnable.setCurrentProgress(currentGradientProgress);

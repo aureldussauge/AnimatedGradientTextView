@@ -54,18 +54,12 @@ public class GradientRunnable implements Runnable {
     private int currentGradient = 0;
 
 
-    /**
-     * The minimum time between each frames in millisecond
-     */
-    private final long deltaTimeExpectedMillis;
-
-    GradientRunnable(TextView textView, int[] colors, int simultaneousColors, int angle, int speed, int maxFPS) {
+    GradientRunnable(TextView textView, int[] colors, int simultaneousColors, int angle, int speed) {
         this.textView = textView;
         this.colors = colors;
 
         this.angle = angle;
         this.speed = speed;
-        this.deltaTimeExpectedMillis = 1000 / maxFPS;
 
         final int wf = textView.getWidth();
         final int hf = textView.getHeight();
@@ -78,26 +72,25 @@ public class GradientRunnable implements Runnable {
     public void run() {
         long currentTime = SystemClock.uptimeMillis();
         long delta = currentTime - lastTime;
-        if (delta > deltaTimeExpectedMillis) {
-            totalDelta += delta;
-            float totalPercentage = totalDelta / ((float) speed);
-            totalPercentage = totalPercentage > 1 ? 1 : totalPercentage;
 
-            for (int colorIndex = 0; colorIndex < currentColors.length; colorIndex++) {
-                currentColors[colorIndex] = (int) (new ArgbEvaluator().evaluate(totalPercentage, colors[(currentGradient + colorIndex) % colors.length], colors[(currentGradient + (colorIndex + 1)) % colors.length]));
-            }
+        totalDelta += delta;
+        float totalPercentage = totalDelta / ((float) speed);
+        totalPercentage = totalPercentage > 1 ? 1 : totalPercentage;
 
-            if (totalPercentage == 1) {
-                totalDelta = 0;
-                currentGradient = (currentGradient + 1) % colors.length;
-            }
-
-            Shader shader = new LinearGradient(gradientsPositions[0].x, gradientsPositions[0].y, gradientsPositions[1].x, gradientsPositions[1].y, currentColors, null, Shader.TileMode.CLAMP);
-            textView.getPaint().setShader(shader);
-
-            textView.postInvalidate();
-            lastTime = currentTime;
+        for (int colorIndex = 0; colorIndex < currentColors.length; colorIndex++) {
+            currentColors[colorIndex] = (int) (new ArgbEvaluator().evaluate(totalPercentage, colors[(currentGradient + colorIndex) % colors.length], colors[(currentGradient + (colorIndex + 1)) % colors.length]));
         }
+
+        if (totalPercentage == 1) {
+            totalDelta = 0;
+            currentGradient = (currentGradient + 1) % colors.length;
+        }
+
+        Shader shader = new LinearGradient(gradientsPositions[0].x, gradientsPositions[0].y, gradientsPositions[1].x, gradientsPositions[1].y, currentColors, null, Shader.TileMode.CLAMP);
+        textView.getPaint().setShader(shader);
+
+        textView.postInvalidate();
+        lastTime = currentTime;
     }
 
     /**
