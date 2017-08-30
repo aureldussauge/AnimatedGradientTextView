@@ -7,11 +7,13 @@ This library will allow you to create TextView which uses color gradients and cu
 
 Changelog
 ---------
-v0.0.6
-* Fix crash
-v0.0.5
-* app:font become app:customFont
-* Add app:maxFPS (define how many times the gradient should refresh each second)
+
+* **v0.0.6**
+  * Fix crash
+
+* **v0.0.5**
+  * app:font become app:customFont
+  * Add app:maxFPS (define how many times the gradient should refresh each second)
 
 Latest release
 ---------------
